@@ -24,7 +24,17 @@ function checksExistsUserAccount(request, response, next) {
 }
 
 function checksCreateTodosUserAvailability(request, response, next) {
-  // Complete aqui
+  const { user } = request;
+
+  const userCanCreateTodos = user.pro || user.todos.length < 10;
+
+  if (!userCanCreateTodos) {
+    return response
+      .status(403)
+      .json({ error: "User exceeded free plan limit" });
+  }
+
+  return next();
 }
 
 function checksTodoExists(request, response, next) {
